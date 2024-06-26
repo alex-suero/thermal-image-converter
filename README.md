@@ -7,6 +7,7 @@ This repository contains a Python script that converts thermal JPEG images captu
 - [Installation](#installation)
 - [Usage](#usage)
 - [Example](#example)
+- [Author](#author)
 
 ## Requirements
 
@@ -86,4 +87,4 @@ Here's an example of how to use the script:
     ```
 
 ## Author
-Alexis Emanuel Suero Mirabal
+This script was developed by [Alexis Suero Mirabal](https://github.com/alex-suero).
