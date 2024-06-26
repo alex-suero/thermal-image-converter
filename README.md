@@ -1,6 +1,6 @@
 # Thermal Image Converter
 
-This repository contains a Python script that converts thermal JPEG images captured by DJI drones into TIFF format with Celsius temperature values. The converted images are saved in the "output_images" folder.
+This repository contains a Python script that converts thermal JPEG images captured by DJI drones into TIFF format containing a single layer with temperature values in Celsius. The converted images are saved in the "output_images" folder.
 
 ## Table of Contents
 - [Requirements](#requirements)
@@ -11,11 +11,13 @@ This repository contains a Python script that converts thermal JPEG images captu
 ## Requirements
 
 - `dji_thermal_sdk` (included in the repository)
-- `exiftool` (executable file should be in the directory)
-- Python 3.x
+- `exiftool` (included in the repository)
+- `GDAL` (version 3.4.3 for Python 3.11 and Windows included in repository)
+
+- Python 3.11
 - The following Python libraries:
   - `gdal`
-  - `osgeo`
+  - `dji_thermal_sdk`
 
 ## Installation
 
@@ -27,12 +29,15 @@ This repository contains a Python script that converts thermal JPEG images captu
     ```
 
 2. **Install the required Python libraries:**
+    
+    - Example with provided GDAL wheel:
 
-    ```sh
-    pip install -r requirements.txt
+   ```sh
+    pip install dji_thermal_sdk
+    python -m pip install GDAL-3.4.3-cp311-cp311-win_amd64.whl
     ```
 
-3. **Download and place `exiftool.exe` in the root directory:**
+4. **Make sure `exiftool.exe` is in the root directory:**
 
     - You can download `exiftool` from [here](https://exiftool.org/).
 
