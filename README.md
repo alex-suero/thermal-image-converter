@@ -11,7 +11,7 @@ This repository contains a Python script that converts thermal JPEG images captu
 
 ## Requirements
 
-- `dji_thermal_sdk` (included in the repository)
+- `DJI Thermal SDK` (included in the repository)
 - `exiftool` (included in the repository)
 - `GDAL` (GDAL v3.4.3 for Python 3.11 and Windows included in repository)
 - Python 3.11
