@@ -118,8 +118,8 @@ def jpg_to_thermal_tif(filename, input_folder):
     out_ds = None
 
     # copy metadata from original JPG file to TIFF file
-    subprocess.Popen(['exiftool', '-tagsfromfile', filepath, out_filepath], 
-                     stdout=None)
+    subprocess.run(['exiftool', '-tagsfromfile', filepath, out_filepath], 
+                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 if __name__=='__main__':
     main()
