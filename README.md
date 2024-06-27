@@ -50,15 +50,17 @@ This repository contains a Python script that converts thermal JPEG images captu
 
     - You can download `DJI Thermal SDK` from [here](https://www.dji.com/global/downloads/softwares/dji-thermal-sdk).
     - `dji_thermal_sdk` folder should look like:
-    ```
-    dji_thermal_sdk/
-    ├── dataset
-    ├── doc
-    └── sample
-        .
-        .
-        .
-    ```
+      ```
+      dji_thermal_sdk/
+      ├── dataset/
+      ├── doc/
+      ├── sample/
+      ├── tsdk-core/
+      ├── utility/
+      ├── History.txt
+      ├── License.txt
+      └── Readme.md
+      ```
 
 ## Usage
 
@@ -69,7 +71,7 @@ This repository contains a Python script that converts thermal JPEG images captu
 2. **Run the script:**
 
     ```sh
-    python thermal_converter.py
+    python dji_thermal_converter.py
     ```
 
 3. **Find your converted images:**
@@ -92,7 +94,7 @@ Here's an example of how to use the script:
 2. **Run the script:**
 
     ```sh
-    python thermal_converter.py
+    python dji_thermal_converter.py
     ```
 
 3. **Check the `output_images` folder for the converted TIFF images:**
