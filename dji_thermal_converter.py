@@ -61,18 +61,18 @@ def main():
                          if file.endswith('original')]
 
     # Move TIFF files with metadata to output folder
-    print('Moving TIFF files...')
+    print('\nMoving TIFF files...')
     for file in tif_files:
         src_path = os.path.join(input_folder, file)
         dest_path = os.path.join(output_folder, file)
         os.rename(src_path, dest_path)
     
     # Delete TIFF files without metadata
-    print('Cleaning directory...')
+    print('Deleting temporary files...')
     for file in no_meta_tif_files:
         os.remove(os.path.join(input_folder, file))
 
-    logging.info('Conversion completed!')
+    logging.info('Done!')
         
 def progress_bar(progress, total):
     """
