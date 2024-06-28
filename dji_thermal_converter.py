@@ -23,9 +23,9 @@ def main():
 
     Steps:
         1. List all thermal JPG images in the input folder.
-        2. Convert each JPG to a thermal TIFF file with temperature values.
+        2. Convert each image to TIFF format with temperature values in a single layer.
         3. Move TIFF files to the output folder.
-        4. Clean up any intermediate files without metadata.
+        4. Delete temporary files.
     """
     input_folder = 'input_images'
     output_folder = 'output_images'
@@ -99,25 +99,25 @@ def jpg_to_thermal_tif(filename, input_folder):
     path = "dji_thermal_sdk/utility/bin/windows/release_x64/libdirp.dll"
     dji_init(path)
 
-    # set input filepath and output filepath
+    # Set input filepath and output filepath
     filepath = os.path.join(input_folder, filename)
     out_file = filename.split('.')[0]+'.tif'
-    out_filepath = 'input_images/'+out_file
+    out_filepath = os.path.join(input_folder, out_file)
 
-    # get temperature image as an array
+    # Get temperature image as an array
     img = rjpeg_to_heatmap(filepath, 0)
 
-    # create output TIFF file
+    # Create output TIFF file
     driver = gdal.GetDriverByName('GTiff')
     out_ds = driver.Create(out_filepath, img.shape[1], 
                            img.shape[0], 1, gdal.GDT_Float32)
     out_band = out_ds.GetRasterBand(1)
 
-    # write array (temperature) to TIFF file
+    # Write array (temperature) to TIFF file
     out_band.WriteArray(img)
     out_ds = None
 
-    # copy metadata from original JPG file to TIFF file
+    # Copy metadata from original JPG file to TIFF file
     subprocess.run(['exiftool', '-tagsfromfile', filepath, out_filepath], 
                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
