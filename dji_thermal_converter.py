@@ -74,7 +74,7 @@ def main():
 
     logging.info('Done!')
         
-def progress_bar(progress, total):
+def progress_bar(progress : int, total : int):
     """
     Prints a progress bar for a given process.
 
@@ -86,14 +86,14 @@ def progress_bar(progress, total):
     bar = '█' * int(percent/2) + '-'*(50 - int(percent/2))
     print(f"\r|{bar}| {progress}/{total} [{percent:.1f}%]", end="\r")
     
-def jpg_to_thermal_tif(filename, input_folder):
+def jpg_to_thermal_tif(filename : str, input_folder : str):
     """
     Converts an RJPEG thermal image to TIF format with a single layer containing
     temperature values in Celsius while maintaining original tags (metadata).
 
-    Arguments:
-        filename: Name of the file inside the input folder.
-        input_folder: Path to the input folder containing the image files.
+    Args:
+        filename (str): name of the file inside the input folder.
+        input_folder (str): path to the input folder containing the image files.
     """
     # Initialize DJI thermal SDK
     path = "dji_thermal_sdk/utility/bin/windows/release_x64/libdirp.dll"
