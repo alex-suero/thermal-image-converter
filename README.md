@@ -13,10 +13,9 @@ This repository contains a Python script that converts thermal JPEG images captu
 
 - `DJI Thermal SDK` (not included in repository)
 - `exiftool` (included in the repository)
-- `GDAL` (GDAL v3.4.3 for Python 3.11 and Windows included in repository)
 - Python 3.11
 - The following Python libraries:
-  - `gdal`
+  - `rasterio`
   - `dji_thermal_sdk`
 
 ## Installation
@@ -36,10 +35,10 @@ This repository contains a Python script that converts thermal JPEG images captu
     pip install dji_thermal_sdk
    ```
 
-   - GDAL installation example with provided GDAL wheel:
+   - Install `rasterio` package:
    
    ```sh
-    python -m pip install GDAL-3.4.3-cp311-cp311-win_amd64.whl
+    pip install rasterio
    ```
 
 3. **Make sure `exiftool.exe` is in the root directory:**
