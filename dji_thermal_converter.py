@@ -4,6 +4,8 @@ import rasterio
 import os
 import subprocess
 import logging
+import warnings
+warnings.filterwarnings("ignore")
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, 
@@ -42,7 +44,7 @@ def main():
                 return None
 
     # Convert thermal JPG files to thermal TIFF files
-    logging.info('Converting thermal JPG files to thermal TIFF files...')
+    logging.info('Converting thermal JPG files to thermal TIFF files')
     total = len(input_files)
     for n, file in enumerate(input_files):
         # Print progress bar
@@ -61,14 +63,14 @@ def main():
                          if file.endswith('original')]
 
     # Move TIFF files with metadata to output folder
-    print('\nMoving TIFF files...')
+    logging.info('Moving TIFF files')
     for file in tif_files:
         src_path = os.path.join(input_folder, file)
         dest_path = os.path.join(output_folder, file)
         os.rename(src_path, dest_path)
     
     # Delete TIFF files without metadata
-    print('Deleting temporary files...')
+    logging.info('Deleting temporary files')
     for file in no_meta_tif_files:
         os.remove(os.path.join(input_folder, file))
 
