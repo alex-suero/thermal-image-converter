@@ -1,9 +1,11 @@
 from dji_thermal_sdk.dji_sdk import *
 from dji_thermal_sdk.utility import rjpeg_to_heatmap
-from osgeo import gdal
+import rasterio
 import os
 import subprocess
 import logging
+import warnings
+warnings.filterwarnings("ignore")
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, 
@@ -42,7 +44,7 @@ def main():
                 return None
 
     # Convert thermal JPG files to thermal TIFF files
-    logging.info('Converting thermal JPG files to thermal TIFF files...')
+    logging.info('Converting thermal JPG files to thermal TIFF files')
     total = len(input_files)
     for n, file in enumerate(input_files):
         # Print progress bar
@@ -61,14 +63,14 @@ def main():
                          if file.endswith('original')]
 
     # Move TIFF files with metadata to output folder
-    print('\nMoving TIFF files...')
+    logging.info('Moving TIFF files')
     for file in tif_files:
         src_path = os.path.join(input_folder, file)
         dest_path = os.path.join(output_folder, file)
         os.rename(src_path, dest_path)
     
     # Delete TIFF files without metadata
-    print('Deleting temporary files...')
+    logging.info('Deleting temporary files')
     for file in no_meta_tif_files:
         os.remove(os.path.join(input_folder, file))
 
@@ -85,8 +87,8 @@ def progress_bar(progress : int, total : int):
     percent = 100 * (progress / float(total))
     bar = '█' * int(percent/2) + '-'*(50 - int(percent/2))
     print(f"\r|{bar}| {progress}/{total} [{percent:.1f}%]", end="\r")
-    
-def jpg_to_thermal_tif(filename : str, input_folder : str):
+
+def jpg_to_thermal_tif(filename: str, input_folder: str):
     """
     Converts an RJPEG thermal image to TIF format with a single layer containing
     temperature values in Celsius while maintaining original tags (metadata).
@@ -101,24 +103,26 @@ def jpg_to_thermal_tif(filename : str, input_folder : str):
 
     # Set input filepath and output filepath
     filepath = os.path.join(input_folder, filename)
-    out_file = filename.split('.')[0]+'.tif'
+    out_file = filename.split('.')[0] + '.tif'
     out_filepath = os.path.join(input_folder, out_file)
 
     # Get temperature image as an array
     img = rjpeg_to_heatmap(filepath, 0)
 
-    # Create output TIFF file
-    driver = gdal.GetDriverByName('GTiff')
-    out_ds = driver.Create(out_filepath, img.shape[1], 
-                           img.shape[0], 1, gdal.GDT_Float32)
-    out_band = out_ds.GetRasterBand(1)
+    # Create and write the output TIFF file using rasterio
+    with rasterio.open(
+        out_filepath,
+        'w',
+        driver='GTiff',
+        height=img.shape[0],
+        width=img.shape[1],
+        count=1,
+        dtype=rasterio.float32,
+    ) as dst:
+        dst.write(img, 1)
 
-    # Write array (temperature) to TIFF file
-    out_band.WriteArray(img)
-    out_ds = None
-
-    # Copy metadata from original JPG file to TIFF file
-    subprocess.run(['exiftool', '-tagsfromfile', filepath, out_filepath], 
+    # Copy metadata from the original JPG file to the TIFF file
+    subprocess.run(['exiftool', '-tagsfromfile', filepath, out_filepath],
                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 if __name__=='__main__':
