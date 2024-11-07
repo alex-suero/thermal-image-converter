@@ -106,4 +106,4 @@ Here's an example of how to use the script:
     ```
 
 ## Author
-This script was developed by [Alexis Suero Mirabal](https://github.com/alex-suero).
+This script was developed by [Alexis Suero](https://github.com/alex-suero).
