@@ -4,12 +4,14 @@ import rasterio
 import os
 import subprocess
 import logging
+from tqdm import tqdm
 import warnings
 warnings.filterwarnings("ignore")
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, 
                     format='%(asctime)s - %(levelname)s - %(message)s')
+
 
 def main():
     """
@@ -25,7 +27,8 @@ def main():
 
     Steps:
         1. List all thermal JPG images in the input folder.
-        2. Convert each image to TIFF format with temperature values in a single layer.
+        2. Convert each image to TIFF format with temperature values in a single 
+           layer.
         3. Move TIFF files to the output folder.
         4. Delete temporary files.
     """
@@ -40,15 +43,14 @@ def main():
                    if file.endswith('_T.JPG')]
     
     if len(input_files) == 0:
-                logging.warning('No thermal images found in the input directory.')
+                logging.warning(
+                     'No thermal images found in the input directory.'
+                )
                 return None
 
     # Convert thermal JPG files to thermal TIFF files
     logging.info('Converting thermal JPG files to thermal TIFF files')
-    total = len(input_files)
-    for n, file in enumerate(input_files):
-        # Print progress bar
-        progress_bar(n + 1, total)
+    for file in tqdm(input_files):
         # Convert JPG to thermal TIFF
         try:
             jpg_to_thermal_tif(file, input_folder)
@@ -75,20 +77,9 @@ def main():
         os.remove(os.path.join(input_folder, file))
 
     logging.info('Done!')
-        
-def progress_bar(progress : int, total : int):
-    """
-    Prints a progress bar for a given process.
 
-    Args:
-        progress (int): current iteration number
-        total (int): total number of iterations
-    """
-    percent = 100 * (progress / float(total))
-    bar = '█' * int(percent/2) + '-'*(50 - int(percent/2))
-    print(f"\r|{bar}| {progress}/{total} [{percent:.1f}%]", end="\r")
 
-def jpg_to_thermal_tif(filename: str, input_folder: str):
+def jpg_to_thermal_tif(filename: str, input_folder: str)-> None:
     """
     Converts an RJPEG thermal image to TIF format with a single layer containing
     temperature values in Celsius while maintaining original tags (metadata).
@@ -124,6 +115,7 @@ def jpg_to_thermal_tif(filename: str, input_folder: str):
     # Copy metadata from the original JPG file to the TIFF file
     subprocess.run(['exiftool', '-tagsfromfile', filepath, out_filepath],
                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
 
 if __name__=='__main__':
     main()

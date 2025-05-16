@@ -13,7 +13,7 @@ This repository contains a Python script that converts thermal JPEG images captu
 ## Requirements
 - `DJI Thermal SDK` (not included in repository)
 - `exiftool` (included in the repository)
-- Python 3.11
+- Python 3.11.x
 - The following Python libraries:
   - `rasterio`
   - `dji_thermal_sdk`
